@@ -13,6 +13,7 @@
     "crypto": "^1.0.1",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
+    "express-generator": "^4.16.1",
     "express-session": "^1.17.1",
     "mongoose": "^5.11.14",
     "passport": "^0.4.1",
