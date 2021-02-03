@@ -1,0 +1,40 @@
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+    <!-- Tabs Titles -->
+
+    <!-- Icon -->
+    <div class="fadeIn first">
+      <div id="title">컴퓨터공학과 사물함 신청</div>
+      <br />
+
+      <img
+        src="https://github.com/cow-coding/cow-coding.github.io/blob/master/image/Emblem_tran.png?raw=true"
+        id="icon"
+        alt="User Icon"
+      />
+    </div>
+
+    <!-- Login Form -->
+    <form action="/login" method="POST">
+      <input
+        type="text"
+        id="name"
+        class="fadeIn third"
+        name="name"
+        placeholder="이름"
+        required
+      />
+      <input
+        type="text"
+        id="login"
+        class="fadeIn second"
+        name="studentID"
+        pattern="[0-9]{8}"
+        oninvalid="this.setCustomValidity('학번 8자리를 입력해주세요')"
+        placeholder="학번 8자리"
+        required
+      />
+      <input type="submit" class="fadeIn fourth" value="Log In" />
+    </form>
+  </div>
+</div>
