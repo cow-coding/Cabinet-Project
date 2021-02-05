@@ -88,10 +88,10 @@ module.exports = function (app, fs, crypto, User, Cabinet) {
     console.log(sess);
   });
 
-  // ------------ please update this API --------------
   // apply the cabinet API
   app.post("/apply", function (req, res) {
     var currCabinet = Number(req.body.cabinetNum);
+    // var f = req.body.floor
     var sess = req.session;
     var f;
     if (sess.floor == 1) {
@@ -104,19 +104,37 @@ module.exports = function (app, fs, crypto, User, Cabinet) {
 
     console.log(sess, currCabinet);
 
-    Cabinet.find(
+    Cabinet.findOne(
       { floor: f, cabinetNumber: currCabinet },
       function (err, cabinets) {
         console.log(f);
         console.log(currCabinet);
-        console.log(sess.studentID);
-        console.log(cabinets.cabinetNumber);
+        console.log(cabinets);
+
+        cabinets.studentID = sess.studentID;
+        cabinets.isUsed = true;
+
+        cabinets.save(function (err) {
+          if (err) {
+            res.status(500).json({ resykt: "failed" });
+          }
+
+          console.log("success");
+        });
       }
     );
 
     User.findOne({ studentID: sess.studentID }, function (err, user) {
       user.useCabinet = currCabinet;
       user.useFloor = sess.floor;
+
+      user.save(function (err) {
+        if (err) {
+          res.status(500).json({ resykt: "failed" });
+        }
+
+        console.log("success");
+      });
     });
   });
 
@@ -137,6 +155,7 @@ module.exports = function (app, fs, crypto, User, Cabinet) {
     }
   });
 
+  // Testing API
   // Create User API for testing user make
   app.post("/create/user", function (req, res) {
     var user = new User();
