@@ -3,6 +3,9 @@
     <%-include('header') %>
   </head>
   <body>
-    <%-include('main') %>
+    <% if(!name && !floor) { %> <%- include('main') %> <% }else if(name &&
+    !floor) {%> <%- include('stairs') %> <%}else if(cabinets != undefined) {
+    if(floor == 1) {%><%-include('first')%><%}else if(floor == 2)
+    {%><%-include('second')%><%}}%>
   </body>
 </html>

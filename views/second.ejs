@@ -1,0 +1,144 @@
+<div class="wrapper fadeInDown">
+  <div id="formContentFirst">
+    <!-- Tabs Titles -->
+
+    <!-- Icon -->
+    <div class="fadeIn first">
+      <div id="title"><h3>컴퓨터공학과 사물함 신청</h3></div>
+      <br />
+
+      <div id="nametag"><h3><%= floor %>층 사물함 목록입니다.</h3></div>
+
+      <script type="text/javascript">
+        function firstFloor() {
+          var form = document.getElementById("stairmove");
+          form.method = "post";
+          form.action = "/first";
+          form.submit();
+        }
+
+        function secondFloor() {
+          var form = document.getElementById("stairmove");
+          form.method = "post";
+          form.action = "/second";
+          form.submit();
+        }
+
+        function applyCabinet(num, floor) {
+          var btn = document.getElementById("second" + num);
+          console.log(num);
+          if (btn.disabled == true) {
+            // disabled btn == is Used
+            alert("이미 선택된 사물함입니다!");
+          } else {
+            var check = confirm(
+              "선택 사물함 : " +
+                floor +
+                "층 사물함 " +
+                num +
+                "\n사물함을 신청하시겠습니까?"
+            );
+
+            if (check) {
+              var form = document.getElementById("stairmove");
+
+              form.method = "post";
+              form.action = "/apply";
+              hiddenField = document.createElement("input");
+              hiddenField.setAttribute("type", "hidden");
+              hiddenField.setAttribute("name", "cabinetNum");
+              hiddenField.setAttribute("value", num);
+              form.append(hiddenField);
+              form.submit();
+            }
+          }
+        }
+      </script>
+
+      <form id="stairmove">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12">
+              <!-- Indicates a successful or positive actiㄴon -->
+
+              <% var cnt = 81; %> <% for(var i = 0; i < 5; i++) {%> <% cnt =
+              81+i %> <% for(var j = 0; j < 8; j++) {%> <%if(i == 8) {%>
+              <button
+                type="button"
+                class="btn btn-default"
+                value=""
+                disabled
+              ></button>
+              <%}else{%> <% if(!cabinets[cnt - 81].isUsed && cnt > 80) {%>
+              <button
+                id="second<%=cnt%>"
+                type="button"
+                class="btn btn-success"
+                onclick='javascript:applyCabinet("<%=cnt%>", "<%=floor%>")'
+                value="<%=cnt%>"
+              >
+                <%=cnt%>
+              </button>
+              <%}else{%>
+              <!-- Indicates a dangerous or potentially negative action -->
+              <button
+                id="second<%=cnt%>"
+                type="button"
+                class="btn btn-danger"
+                value="<%=cnt%>"
+                onclick='javascript:applyCabinet("<%=cnt%>", "<%=floor%>")'
+                disabled
+              >
+                <%=cnt%>
+              </button>
+              <% } %> <% cnt+=5;} %> <% } %>
+              <br />
+              <% } %> <% var cnt = 1; %> <% for(var i = 0; i < 5; i++) {%> <%
+              cnt = i + 1 %> <% for(var j = 0; j < 20; j++) {%> <% if(j == 8 ||
+              j == 11 || j == 14 || j == 17) {%>
+              <button
+                type="button"
+                class="btn btn-default"
+                value=""
+                disabled
+              ></button>
+              <% }else{%> <% if(!cabinets[cnt - 1].isUsed) {%>
+              <button
+                id="second<%=cnt%>"
+                type="button"
+                class="btn btn-success"
+                onclick='javascript:applyCabinet("<%=cnt%>", "<%=floor%>")'
+                value="<%=cnt%>"
+              >
+                <%=cnt%>
+              </button>
+              <% }else{ %>
+              <button
+                id="second<%=cnt%>"
+                type="button"
+                class="btn btn-danger"
+                onclick='javascript:applyCabinet("<%=cnt%>", "<%=floor%>")'
+                value="<%=cnt%>"
+                disabled
+              >
+                <%=cnt%>
+              </button>
+              <% } %> <% cnt+=5} %> <% } %>
+              <br />
+              <% } %>
+
+              <!-- Indicates a successful or positive action -->
+              <button
+                type="button"
+                class="btn btn-info"
+                onclick="javascript:firstFloor();"
+              >
+                1층 이동하기
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

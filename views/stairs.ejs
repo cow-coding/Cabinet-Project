@@ -1,0 +1,64 @@
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+    <!-- Tabs Titles -->
+
+    <!-- Icon -->
+    <div class="fadeIn first">
+      <div id="title"><h3>컴퓨터공학과 사물함 신청</h3></div>
+      <br />
+
+      <img
+        src="https://github.com/cow-coding/cow-coding.github.io/blob/master/image/Emblem_tran.png?raw=true"
+        id="icon"
+        alt="User Icon"
+      />
+    </div>
+
+    <script type="text/javascript">
+      function firstFloor() {
+        var form = document.getElementById("stairmove");
+        form.method = "post";
+        form.action = "/first";
+        form.submit();
+      }
+
+      function secondFloor() {
+        var form = document.getElementById("stairmove");
+        form.method = "post";
+        form.action = "/second";
+        form.submit();
+      }
+    </script>
+
+    <!-- Login Form -->
+    <form id="stairmove">
+      <div id="nametag"><h3>안녕하세요! <%= name %>님</h3></div>
+
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <h3>사물함을 선택할 층을 골라주세요.</h3>
+
+            <!-- Indicates a successful or positive action -->
+            <button
+              type="button"
+              class="btn btn-info"
+              onclick="javascript:firstFloor();"
+            >
+              1층
+            </button>
+
+            <!-- Contextual button for informational alert messages -->
+            <button
+              type="button"
+              class="btn btn-info"
+              onclick="javascript:secondFloor();"
+            >
+              2층
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
