@@ -11,6 +11,7 @@ module.exports = function (app, fs, crypto, User, Cabinet) {
       name: sess.name,
       studentID: sess.studentID,
       floor: sess.floor,
+      isPay: sess.isPay,
       cabinets: undefined,
     });
   });
@@ -37,6 +38,7 @@ module.exports = function (app, fs, crypto, User, Cabinet) {
           `student id: ${user.studentID}, name: ${user.name}, isPay:${user.isPay}`
         );
 
+        sess.isPay = user.isPay;
         sess.studentID = user.studentID;
         sess.name = user.name;
 
@@ -83,9 +85,6 @@ module.exports = function (app, fs, crypto, User, Cabinet) {
         floor: sess.floor,
       });
     });
-
-    console.log("second");
-    console.log(sess);
   });
 
   // apply the cabinet API
@@ -94,48 +93,54 @@ module.exports = function (app, fs, crypto, User, Cabinet) {
     // var f = req.body.floor
     var sess = req.session;
     var f;
-    if (sess.floor == 1) {
-      f = "first";
+
+    if (!sess.isPay) {
+      const notPay =
+        '<script type="text/javascript">alert("과 자치비 납부자만 신청가능합니다."); window.history.back();</script>';
+
+      res.send(notPay);
     } else {
-      f = "second";
-    }
+      if (sess.floor == 1) {
+        f = "first";
+      } else {
+        f = "second";
+      }
 
-    console.log(typeof currCabinet);
+      Cabinet.findOne(
+        { floor: f, cabinetNumber: currCabinet },
+        function (err, cabinets) {
+          console.log(f);
+          console.log(currCabinet);
+          console.log(cabinets);
 
-    console.log(sess, currCabinet);
+          cabinets.studentID = sess.studentID;
+          cabinets.isUsed = true;
 
-    Cabinet.findOne(
-      { floor: f, cabinetNumber: currCabinet },
-      function (err, cabinets) {
-        console.log(f);
-        console.log(currCabinet);
-        console.log(cabinets);
+          cabinets.save(function (err) {
+            if (err) {
+              res.status(500).json({ resykt: "failed" });
+            }
 
-        cabinets.studentID = sess.studentID;
-        cabinets.isUsed = true;
+            console.log("success");
+          });
+        }
+      );
 
-        cabinets.save(function (err) {
+      User.findOne({ studentID: sess.studentID }, function (err, user) {
+        user.useCabinet = currCabinet;
+        user.useFloor = sess.floor;
+
+        user.save(function (err) {
           if (err) {
             res.status(500).json({ resykt: "failed" });
           }
 
           console.log("success");
         });
-      }
-    );
-
-    User.findOne({ studentID: sess.studentID }, function (err, user) {
-      user.useCabinet = currCabinet;
-      user.useFloor = sess.floor;
-
-      user.save(function (err) {
-        if (err) {
-          res.status(500).json({ resykt: "failed" });
-        }
-
-        console.log("success");
       });
-    });
+
+      res.render("exit_main");
+    }
   });
 
   // Logout API
